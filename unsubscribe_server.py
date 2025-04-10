@@ -3,9 +3,8 @@ import hmac
 import hashlib
 import os
 
-
 app = Flask(__name__)
-SECRET_KEY = b'G4`(L4WRZK3Al_y@pVr>-dZC<1x9vO'  # 🔒 change this to something long and random
+SECRET_KEY = b'G4`(L4WRZK3Al_y@pVr>-dZC<1x9vO'  # 🔒 keep this secret
 
 def generate_token(email):
     return hmac.new(SECRET_KEY, email.encode(), hashlib.sha256).hexdigest()
@@ -28,6 +27,14 @@ def unsubscribe():
         f.write(email + "\n")
 
     return f"You ({email}) have been successfully unsubscribed. You won’t receive any more emails from us."
+
+@app.route('/unsubscribed.txt')
+def get_unsubscribed_file():
+    try:
+        with open("unsubscribed.txt", "r") as f:
+            return f.read(), 200, {'Content-Type': 'text/plain'}
+    except FileNotFoundError:
+        return "", 200, {'Content-Type': 'text/plain'}
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 10000))
