@@ -1,6 +1,8 @@
 from flask import Flask, request
 import hmac
 import hashlib
+import os
+
 
 app = Flask(__name__)
 SECRET_KEY = b'G4`(L4WRZK3Al_y@pVr>-dZC<1x9vO'  # 🔒 change this to something long and random
@@ -28,4 +30,5 @@ def unsubscribe():
     return f"You ({email}) have been successfully unsubscribed. You won’t receive any more emails from us."
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8000)
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host='0.0.0.0', port=port)
