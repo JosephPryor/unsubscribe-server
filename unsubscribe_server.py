@@ -32,6 +32,7 @@ def unsubscribe():
     if not is_token_valid(email, token):
         return "Invalid or expired token.", 403
 
+    conn = None
     try:
         conn = get_db_connection()
         with conn:
@@ -46,6 +47,7 @@ def unsubscribe():
     finally:
         if conn:
             conn.close()
+
 
 @app.route('/unsubscribed')
 def get_unsubscribed_file():
